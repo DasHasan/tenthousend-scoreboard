@@ -1,0 +1,51 @@
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto; /* Allows horizontal scrolling when necessary */
+  border: 1px solid #ccc; /* Optional: Adds a border around the table */
+}
+
+.scrollable-tbody {
+  max-height: 200px; /* Adjust as necessary */
+  overflow-y: auto; /* Allows vertical scrolling when necessary */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto; /* Allows the table to grow beyond 100% width if necessary */
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd; /* Adds a border around cells */
+  white-space: nowrap; /* Prevents text wrapping inside cells */
+  min-width: 100px; /* Sets a minimum width for cells to prevent squashing */
+}
+
+th small {
+  display: block;
+  margin-top: 5px;
+}
+
+/* Responsive styles for smaller screens */
+@media (max-width: 600px) {
+  th,
+  td {
+    padding: 8px;
+    font-size: 0.8em;
+  }
+
+  input[type='number'] {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px; /* Adds some space below the input field */
+  }
+
+  button {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px; /* Adds some space below the button */
+  }
+}

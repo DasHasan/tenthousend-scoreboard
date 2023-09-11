@@ -53,7 +53,14 @@ export const App: FC<Props> = ({ name }) => {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        width: '100%',
+        maxWidth: '600px',
+        margin: '0 auto',
+        padding: '10px',
+      }}
+    >
       <GameHeader gameState={gameState} />
       <TransitionGroup>
         <CSSTransition key={gameState} timeout={500} classNames="fade">

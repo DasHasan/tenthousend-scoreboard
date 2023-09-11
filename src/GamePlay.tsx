@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import './GamePlay.css';
 
 type GamePlayProps = {
   currentPlayerIndex: number;
