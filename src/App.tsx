@@ -48,19 +48,12 @@ export const App: FC<Props> = ({ name }) => {
   };
 
   const startGame = () => {
-    setGameState('STARTED');
+    setGameState(GameState.STARTED);
     setCurrentPlayerIndex(0);
   };
 
   return (
-    <div
-      style={{
-        width: '100%',
-        maxWidth: '600px',
-        margin: '0 auto',
-        padding: '10px',
-      }}
-    >
+    <div>
       <GameHeader gameState={gameState} />
       <TransitionGroup>
         <CSSTransition key={gameState} timeout={500} classNames="fade">

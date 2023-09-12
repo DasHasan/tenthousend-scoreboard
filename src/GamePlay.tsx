@@ -1,6 +1,25 @@
 import React, { FC, useState } from 'react';
 import './GamePlay.css';
 
+type TableScoreHeader = {
+  players: string[];
+  playerSums: any[];
+};
+
+const TableScoreHeader: FC<TableScoreHeader> = ({ players, playerSums }) => {
+  return (
+    <tr>
+      {players.map((player, idx) => (
+        <th key={player}>
+          {player}
+          <br />
+          <small>{playerSums[idx]}</small>
+        </th>
+      ))}
+    </tr>
+  );
+};
+
 type GamePlayProps = {
   currentPlayerIndex: number;
   players: string[];
@@ -38,25 +57,12 @@ const GamePlay: FC<GamePlayProps> = ({
       />
       <button onClick={handleScoreSubmit}>Add Score</button>
 
-      {/* Header Table */}
       <div className="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              {players.map((player, idx) => (
-                <th key={player}>
-                  {player}
-                  <br />
-                  <small>Sum: {playerSums[idx]}</small>
-                </th>
-              ))}
-            </tr>
-          </thead>
-        </table>
-
-        {/* Body Table */}
         <div className="scrollable-tbody">
           <table>
+            <thead>
+              <TableScoreHeader playerSums={playerSums} players={players} />
+            </thead>
             <tbody>
               {playerScores.map((scoreRow, rowIndex) => (
                 <tr
@@ -71,6 +77,11 @@ const GamePlay: FC<GamePlayProps> = ({
                 </tr>
               ))}
             </tbody>
+            {playerScores.length > 5 && (
+              <tfoot>
+                <TableScoreHeader playerSums={playerSums} players={players} />
+              </tfoot>
+            )}
           </table>
         </div>
       </div>

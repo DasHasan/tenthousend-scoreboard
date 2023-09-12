@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import './PlayerCreation.css';
 
 type PlayerCreationProps = {
   players: string[];
@@ -25,13 +26,11 @@ const PlayerCreation: FC<PlayerCreationProps> = ({
     <button onClick={onAddPlayer}>Add Player</button>
     {players.length > 0 && (
       <>
-        <ul>
-          {players.map((player, index) => (
-            <li key={player}>
-              {index + 1}. {player}
-            </li>
+        <ol>
+          {players.map((player) => (
+            <li key={player}>{player}</li>
           ))}
-        </ul>
+        </ol>
         <button onClick={onStartGame}>Start Game</button>
       </>
     )}
