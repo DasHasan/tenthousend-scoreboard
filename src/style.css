@@ -1,41 +1,14 @@
-/* Root */
-body {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+/* style.css */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* Generic Styles */
-a,
-button {
-  color: #4fc08d;
-  background: none;
-  border: solid 1px;
-  border-radius: 2em;
-  font: inherit;
-  padding: 0.75em 2em;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background-color 0.2s;
-}
-
-button:hover,
-a:hover {
-  background-color: #4fc08d;
-  color: white;
-}
-
-input {
-  padding: 10px;
-  border-radius: 2em;
-  border: solid 1px #4fc08d;
-  margin: 10px;
-  width: 60%; /* Adjust width for a better appearance */
-}
-
-/* Text Styles */
-h2 {
-  font-size: 1.2em;
-  margin-bottom: 10px;
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
