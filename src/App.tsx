@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {CSSProperties, FC, useState} from 'react';
 import GameHeader from './GameHeader';
 import PlayerCreation from './PlayerCreation';
 import GamePlay from './GamePlay';
@@ -54,16 +54,45 @@ export const App: FC<Props> = () => {
 
     const {Footer, Content} = Layout;
 
-    const contentStyle: React.CSSProperties = {
+    const contentStyle: CSSProperties = {
         textAlign: 'center',
         minHeight: 120,
         lineHeight: '120px',
     };
 
-    const footerStyle: React.CSSProperties = {
+    const footerStyle: CSSProperties = {
         textAlign: 'center',
     };
 
+    const removePlayer = (index: number) => {
+        const newPlayers = [...players];
+        newPlayers.splice(index, 1);
+
+        const newScores = playerScores.map((scoresRow) => {
+            const newRow = [...scoresRow];
+            newRow.splice(index, 1);
+            return newRow;
+        });
+
+        setPlayers(newPlayers);
+        setPlayerScores(newScores);
+    };
+
+    const undoScore = () => {
+        if (playerScores.length > 1) {
+            // Remove the last score
+            const newScores = [...playerScores];
+            newScores.pop();
+            setPlayerScores(newScores);
+            // Set index to the previous player
+            setCurrentPlayerIndex(prev => (prev - 1 + players.length) % players.length);
+        } else if (playerScores.length === 1) {
+            // Reset the first score to 0 for the current player
+            const newScores = [[...playerScores[0]]];
+            newScores[0][currentPlayerIndex] = 0;
+            setPlayerScores(newScores);
+        }
+    };
 
     return (
         <div style={{height: '100%'}}>
@@ -83,6 +112,7 @@ export const App: FC<Props> = () => {
                                     currentPlayer={currentPlayer}
                                     onAddPlayer={addPlayer}
                                     onPlayerNameChange={setCurrentPlayer}
+                                    onRemovePlayer={removePlayer}
                                     onStartGame={startGame}
                                 />
                             )}
@@ -92,6 +122,7 @@ export const App: FC<Props> = () => {
                                     players={players}
                                     playerScores={playerScores}
                                     onScoreUpdate={updateScore}
+                                    onUndo={undoScore} // Pass the undo function here
                                 />
                             )}
                         </div>

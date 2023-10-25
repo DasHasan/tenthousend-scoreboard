@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "antd": "^5.10.2",

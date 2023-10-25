@@ -1,33 +1,20 @@
-import {useState} from 'react';
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 
-const styles = {
-    emojiIcon: {
-        display: 'inline-block',
-        fontSize: '24px',
-        transition: 'transform 0.3s ease',
-        cursor: 'pointer',
-    },
-    emojiIconHover: {
-        display: 'inline-block',
-        fontSize: '24px',
-        transition: 'transform 0.3s ease',
-        transform: 'rotate(360deg)',
-        cursor: 'pointer',
-    },
-};
+const emojiIconStyle = css`
+  display: inline-block;
+  font-size: xxx-large;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  user-select: none;
 
-const EmojiIcon = ({emoji}) => {
-    const [isHovered, setIsHovered] = useState(false);
+  &:hover {
+    transform: rotate(360deg);
+  }
+`;
 
-    return (
-        <span
-            style={isHovered ? styles.emojiIconHover : styles.emojiIcon}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-        >
-      {emoji}
-    </span>
-    );
+const EmojiIcon = ({ emoji }) => {
+    return <span css={emojiIconStyle}>{emoji}</span>;
 };
 
 export default EmojiIcon;
