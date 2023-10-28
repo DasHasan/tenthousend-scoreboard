@@ -77,23 +77,6 @@ export const App: FC<Props> = () => {
         setPlayers(newPlayers);
         setPlayerScores(newScores);
     };
-
-    const undoScore = () => {
-        if (playerScores.length > 1) {
-            // Remove the last score
-            const newScores = [...playerScores];
-            newScores.pop();
-            setPlayerScores(newScores);
-            // Set index to the previous player
-            setCurrentPlayerIndex(prev => (prev - 1 + players.length) % players.length);
-        } else if (playerScores.length === 1) {
-            // Reset the first score to 0 for the current player
-            const newScores = [[...playerScores[0]]];
-            newScores[0][currentPlayerIndex] = 0;
-            setPlayerScores(newScores);
-        }
-    };
-
     return (
         <div style={{height: '100%'}}>
             <Space direction="vertical" style={{width: '100%'}} size={[0, 48]}>
@@ -122,7 +105,7 @@ export const App: FC<Props> = () => {
                                     players={players}
                                     playerScores={playerScores}
                                     onScoreUpdate={updateScore}
-                                    onUndo={undoScore} // Pass the undo function here
+                                    setPlayerScores={setPlayerScores}  // Pass down setPlayerScores as a prop
                                 />
                             )}
                         </div>

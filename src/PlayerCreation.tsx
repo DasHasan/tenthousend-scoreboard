@@ -1,6 +1,8 @@
+/** @jsxImportSource @emotion/react */
 import {FC, useRef} from 'react';
-import {Avatar, Button, Input, List, Space} from "antd";
-import {UserAddOutlined, DeleteOutlined} from "@ant-design/icons";
+import {Avatar, Button, Col, Input, List, Row, Space} from "antd";
+import {DeleteOutlined, UserAddOutlined} from "@ant-design/icons";
+import {css} from "@emotion/react";
 
 type PlayerCreationProps = {
     players: string[];
@@ -26,41 +28,48 @@ const PlayerCreation: FC<PlayerCreationProps> =
             onAddPlayer();
             inputRef.current && inputRef.current.focus();
         };
-
+        const fullWidth = css`
+          width: 100%;
+        `;
         return (
-            <Space size={"small"} direction={"vertical"}>
-                <Space style={{width: '100%'}}>
-                    <Input
-                        type="text"
-                        value={currentPlayer}
-                        onChange={(e) => onPlayerNameChange(e.target.value)}
-                        autoComplete="off"
-                        placeholder="Name"
-                        ref={inputRef}
-                    />
-                    <Button type="primary" onClick={handleAddPlayer}><UserAddOutlined/></Button>
-                </Space>
+            <Row>
+                <Col xs={{span: 22, offset: 1}} xl={{span: 8, offset: 8}}>
+                    <Space size={"small"} direction={"vertical"} css={fullWidth}>
+                        <Space.Compact css={fullWidth}>
+                            <Input
+                                type="text"
+                                value={currentPlayer}
+                                onChange={(e) => onPlayerNameChange(e.target.value)}
+                                autoComplete="off"
+                                placeholder="Name"
+                                ref={inputRef}
+                            />
+                            <Button type="primary" onClick={handleAddPlayer}><UserAddOutlined/></Button>
+                        </Space.Compact>
 
-                {players.length > 0 && (
-                    <>
-                        <List bordered
-                              dataSource={players}
-                              renderItem={(item, index) => (
-                                  <List.Item actions={[
-                                      <DeleteOutlined onClick={() => onRemovePlayer(index)} />
-                                  ]}>
-                                      <List.Item.Meta
-                                          avatar={<Avatar
-                                              src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}/>}
-                                          title={item}
-                                      />
-                                  </List.Item>
-                              )}
-                        />
-                        <Button onClick={onStartGame}>Start</Button>
-                    </>
-                )}
-            </Space>
+                        {players.length > 0 && (
+                            <>
+                                <List bordered
+                                      dataSource={players}
+                                      renderItem={(item, index) => (
+                                          <List.Item actions={[
+                                              <DeleteOutlined onClick={() => onRemovePlayer(index)}/>
+                                          ]}>
+                                              <List.Item.Meta
+                                                  avatar={<Avatar
+                                                      src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}/>}
+                                                  title={item}
+                                              />
+                                          </List.Item>
+                                      )}
+                                />
+                                <Button onClick={onStartGame}>Start</Button>
+                            </>
+                        )}
+                    </Space>
+
+                </Col>
+            </Row>
         );
     };
 

@@ -1,15 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import {FC, useRef, useState} from 'react';
-import {Button, Input, Space, Table, Tooltip} from "antd";
+import {Button, Input, Space, Table, Tooltip, Typography} from "antd";
 import {ColumnsType} from "antd/es/table";
-import './GamePlay.css';
+import {css} from "@emotion/react";
+
+const {Paragraph} = Typography;
 
 type GamePlayProps = {
     currentPlayerIndex: number;
     players: string[];
     playerScores: number[][];
     onScoreUpdate: (score: number) => void;
-    onUndo: () => void; // Add this line
+    setPlayerScores: (playerScores: number[][]) => void;
 };
 
 interface DataType {
@@ -20,23 +22,21 @@ const GamePlay: FC<GamePlayProps> = ({
                                          currentPlayerIndex,
                                          players,
                                          playerScores,
-                                         onUndo,
                                          onScoreUpdate,
+                                         setPlayerScores,
                                      }) => {
     const [scoreInput, setScoreInput] = useState('');
     const [showTooltip, setShowTooltip] = useState(false);
-    const [previousScores, setPreviousScores] = useState<number[][]>([]);
 
     const inputRef = useRef(null);
     const tableBodyRef = useRef(null);
 
     const isValidScore = (score: number) => {
-        return score >= 350 && score % 50 === 0;
+        return score === 0 || (score >= 350 && score % 50 === 0);
     };
 
     const handleScoreSubmit = () => {
         if (scoreInput && isValidScore(Number(scoreInput))) {
-            setPreviousScores(playerScores); // Save the current scores
             onScoreUpdate(Number(scoreInput));
             setScoreInput('');
             setShowTooltip(false); // hide tooltip when input is valid
@@ -47,8 +47,22 @@ const GamePlay: FC<GamePlayProps> = ({
         scrollToBottom();
     };
 
+    const handleScoreChange = (newScore: string, key: string, idx: number) => {
+        // error handling for invalid input
+        if (!newScore) {
+            return;
+        }
+        if (!isValidScore(parseInt(newScore, 10))) {
+            return;
+        }
+
+        const rowIndex = parseInt(key, 10);
+        const updatedScores = [...playerScores];
+        updatedScores[rowIndex][idx] = parseInt(newScore, 10);
+        setPlayerScores(updatedScores);
+    };
+
     const handleMiss = () => {
-        setPreviousScores(playerScores); // Save the current scores
         onScoreUpdate(0);
         if (lastThreeScoresAreZero()) {
             onScoreUpdate(-500);
@@ -64,30 +78,59 @@ const GamePlay: FC<GamePlayProps> = ({
         return lastThree.length === 3 && lastThree.every(score => score === 0);
     };
 
-    // Define the RowHead column
-    // Construct the columns for Ant Design table, starting with the RowHead column.
+    const currentPlayerHighlight = css`
+      display: inline-block;
+      position: relative;
+      transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+
+      animation: bouncyJump 1.2s infinite cubic-bezier(0.68, -0.55, 0.27, 1.55);
+
+      @keyframes bouncyJump {
+        0%, 100% {
+          transform: translateY(0) rotate(0deg);
+          color: royalblue;
+        }
+        30% {
+          transform: translateY(-10px) rotate(-5deg);
+          color: crimson;
+        }
+        50% {
+          transform: translateY(0) rotate(0deg);
+          color: royalblue;
+        }
+        70% {
+          transform: translateY(-10px) rotate(5deg);
+          color: crimson;
+        }
+      }
+    `;
+
     const columns: ColumnsType<DataType> = [
         {
             dataIndex: 'key',
-            width: '2ch', // 2 characters wide
+            width: '50px',
             key: 'key',
             rowScope: 'row',
         },
-        ...players.map((player, idx) => ({
-            title: () => idx === currentPlayerIndex ? <span className="highlight-column">{player}</span> : player,
+        ...players.map<DataType>((player, idx) => ({
             dataIndex: `player${idx}`,
-            key: idx,
-            width: idx === currentPlayerIndex ? 120 : 100,
-            className: idx === currentPlayerIndex ? 'highlight-column' : '',
-            render: (score: number) => {
-                let className = '';
-                if (score === 0) {
-                    className = 'ant-btn-warning';
-                } else if (score === -500) {
-                    className = 'ant-btn-danger';
-                }
-                return <span className={className}>{score}</span>;
-            }
+            key: `player${idx}`,
+            title: () => idx === currentPlayerIndex ? <span css={currentPlayerHighlight}>{player}</span> : player,
+            render: (score: number, record: DataType) => (
+                score != null ?
+                    <Paragraph
+                        editable={{
+                            text: score.toString(),
+                            onChange: (newScore) => handleScoreChange(newScore, record.key, idx),
+                            triggerType: ['text']
+                        }}
+                        inputMode={'numeric'}
+                    >
+                        {score}
+                    </Paragraph>
+                    : ''
+            ),
         }))
     ];
 
@@ -133,7 +176,6 @@ const GamePlay: FC<GamePlayProps> = ({
                     onPressEnter={handleScoreSubmit}  // Bind the submission to Enter key
                 />
             </Tooltip>
-            <Button onClick={() => onUndo()}>Undo</Button>
         </Space>
     )
 
